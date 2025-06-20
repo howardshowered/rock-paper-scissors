@@ -1,6 +1,7 @@
 
 let humanScore = 0;
 let computerScore = 0;
+let resultsContent = "";
 
 function getComputerChoice()
 {
@@ -24,60 +25,84 @@ function getHumanChoice()
 }
 
 //Step 5: Write the logic to play a single round
-function playRound(humanChoice, computerChoice) 
+function playRound(event) 
 {
-    const lHumanChoice = humanChoice.toLowerCase();
-    const lComputerChoice = computerChoice.toLowerCase();
 
+    const lHumanChoice = event.target.textContent.toLowerCase().trim();
+    const lComputerChoice = getComputerChoice();
+    const resultDiv = document.querySelector("#results");
+
+    let newResult = document.createElement("p");
     if (lHumanChoice === lComputerChoice){
-        console.log("It's a tie!" )
+        // resultsContent += "It's a tie!\n"; 
+        newResult.textContent =   "It's a tie!"; 
+
     } else if (lHumanChoice === "rock" && lComputerChoice === "paper")
     {
-        console.log("You lose! Paper beats Rock");
+        // resultsContent += "You lose! Paper beats Rock\n"; 
+        newResult.textContent =   "You lose! Paper beats Rock\n"; 
         computerScore++;
     }  else if (lHumanChoice === "rock" && lComputerChoice === "scissors")
     {
-        console.log("You win! Rock beats Scissors");
+
+        //  resultsContent += "You win! Rock beats Scissors\n"; 
+         newResult.textContent =   "You win! Rock beats Scissors"; 
         humanScore++;
 
     } else if (lHumanChoice === "paper" && lComputerChoice === "scissors")
     {
-        console.log("You lose! Scissors beats Paper");
+
+        newResult.textContent =   "You lose! Scissors beats Paper";
+        //  resultsContent += "You lose! Scissors beats Paper\n";
         computerScore++;
     } else if (lHumanChoice === "paper" && lComputerChoice === "rock")
     {
-        console.log("You win!  Paper beats Rock");
+        // newResult.textContent =   "You win!  Paper beats Rock"; 
+            newResult.textContent =  "You win!  Paper beats Rock"; 
+         resultsContent += "You win!  Paper beats Rock\n"; 
         humanScore++;
 
     } else if (lHumanChoice === "scissors" && lComputerChoice === "rock") 
-    {
-        console.log("You lose! Rock beats Scissors");
+    {   
+        // resultsContent += "You lose! Rock beats Scissors\n"; 
+                    newResult.textContent =  "You lose! Rock beats Scissors";
         computerScore++;
     } else if (lHumanChoice === "scissors" && lComputerChoice === "paper")  
     {
-        console.log("You win! Scissors beats Paper");
+          newResult.textContent =  "You win! Scissors beats Paper\n"; 
+        // resultsContent += "You win! Scissors beats Paper\n"; 
         humanScore++;
     }
 
-}
-
-
-
-// playRound(humanSelection, computerSelection);
-
-function playGame() 
-{
-
-    for(let i = 0; i < 5; i++){
-        const humanSelection = getHumanChoice();
-        const computerSelection = getComputerChoice();
-        playRound(humanSelection, computerSelection);
+    resultDiv.appendChild(newResult);
+    if(humanScore === 5)
+    {
+        printScore("Human");
+    } else if (  computerScore === 5) {
+        printScore("Computer");
     }
+   
+}
 
-    console.log(`******The scoreboard:******\nYour Score: ${humanScore}\nComputerScore: ${computerScore}`);
+const playBtn = document.querySelector("#play-buttons");
+
+playBtn.addEventListener( "click", playRound);
+
+function printScore(winner) 
+{
+    const resultDiv = document.querySelector("#results");
+    let scoreBoard = document.createElement("p");
+    scoreBoard.textContent = `****** Game Over! ${winner} won the game!*********
+     **********The scoreboard:******  Your Score: ${humanScore}  ComputerScore: ${computerScore}`;
+
+    resultDiv.appendChild(scoreBoard);
+
+    //clear scoreboard
+    humanScore = 0;
+    computerScore = 0;
 
 }
 
-playGame();
+// playGame();
 
 
